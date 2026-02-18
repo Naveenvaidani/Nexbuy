@@ -1,0 +1,104 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+
+# Database
+data/
+*.db
+
+# Uploads
+uploads/
+temp/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Docker
+docker-compose.override.yml
+
+# SSL Certificates (for dev)
+certs/*.pem
+certs/*.key
+certs/*.crt
+!certs/.gitkeep
+
+# Python virtual environments
+venv/
+env/
+ENV/
+.venv
+pyenv.cfg
+pyvenv.cfg
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+*.orig
+
+# Project specific
+Project1.zip
+package-lock.json
+yarn.lock
+.eslintcache
+
+# MacOS additional patterns
+._*
+.Spotlight-V100
+
+# Windows additional patterns
+desktop.ini
+ehthumbs.db
+
+# IDE extensions
+*.sublime-project
+*.sublime-workspace
+
+# Node development
+.next/
+.nuxt/
+.cache/
+.parcel-cache
+.eslintignore
+
+# Testing
+.mocha*
+.jest_cache/
+junit.xml

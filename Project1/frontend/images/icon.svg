@@ -1,0 +1,32 @@
+<!-- SVG Icon for NexBuy PWA -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#FF6F61" rx="80"/>
+  
+  <!-- Lightning Bolt -->
+  <path d="M300 100 L200 280 L250 280 L212 412 L350 232 L300 232 Z" 
+        fill="#FFFFFF" 
+        stroke="#F5A623" 
+        stroke-width="8"
+        stroke-linejoin="round"/>
+  
+  <!-- Shopping Cart -->
+  <g transform="translate(280, 320)">
+    <circle cx="20" cy="50" r="15" fill="#FFFFFF"/>
+    <circle cx="60" cy="50" r="15" fill="#FFFFFF"/>
+    <path d="M 0 0 L 15 0 L 25 35 L 75 35 L 85 10 L 30 10" 
+          fill="none" 
+          stroke="#FFFFFF" 
+          stroke-width="8"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="256" y="460" 
+        font-family="Arial, sans-serif" 
+        font-size="60" 
+        font-weight="bold" 
+        fill="#FFFFFF" 
+        text-anchor="middle">NexBuy</text>
+</svg>

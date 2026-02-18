@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - NexBuy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/modern.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-bag-check-fill text-warning"></i> NexBuy
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action active" data-tab="profile">
+                            <i class="bi bi-person"></i> Profile
+                        </button>
+                        <button class="list-group-item list-group-item-action" data-tab="wallet">
+                            <i class="bi bi-wallet2"></i> Wallet
+                        </button>
+                        <button class="list-group-item list-group-item-action" data-tab="profiles">
+                            <i class="bi bi-people"></i> Shopping Profiles
+                        </button>
+                        <button class="list-group-item list-group-item-action" data-tab="referral">
+                            <i class="bi bi-gift"></i> Referral
+                        </button>
+                        <a href="orders.html" class="list-group-item list-group-item-action">
+                            <i class="bi bi-box-seam"></i> Orders
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="col-md-9">
+                    <!-- Profile Tab -->
+                    <div class="tab-content active" id="profileTab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">My Profile</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="profileName">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="profileEmail" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="profilePhone">
+                                </div>
+                                <button class="btn btn-warning" id="updateProfileBtn">Update Profile</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Tab -->
+                    <div class="tab-content" id="walletTab">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <h3 class="text-success">₹<span id="walletBalance">0</span></h3>
+                                        <p class="text-muted">Wallet Balance</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h3 class="text-warning"><span id="coinsBalance">0</span></h3>
+                                        <p class="text-muted">Coins (1 coin = ₹0.10)</p>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addMoneyModal">
+                                        <i class="bi bi-plus-circle"></i> Add Money
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Transaction History</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="transactionsList">
+                                    <div class="text-center py-3">
+                                        <div class="spinner-border spinner-border-sm"></div> Loading...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shopping Profiles Tab -->
+                    <div class="tab-content" id="profilesTab">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Shopping Profiles</h5>
+                                <button class="btn btn-sm btn-warning" id="addProfileBtn">
+                                    <i class="bi bi-plus"></i> Add Profile
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="profilesList">
+                                    <div class="text-center py-3">
+                                        <div class="spinner-border spinner-border-sm"></div> Loading...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Referral Tab -->
+                    <div class="tab-content" id="referralTab">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5>Your Referral Code</h5>
+                                <h2 class="text-warning my-3" id="referralCode">LOADING...</h2>
+                                <p class="text-muted">Share this code and earn ₹50 when someone signs up!</p>
+                                <button class="btn btn-warning" id="copyReferralBtn">
+                                    <i class="bi bi-clipboard"></i> Copy Code
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Money Modal -->
+    <div class="modal fade" id="addMoneyModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Money to Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="addMoneyAmount" min="1" placeholder="Enter amount">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" id="confirmAddMoneyBtn">Add Money</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        let userData = null;
+
+        async function init() {
+            if (!authManager.requireAuth()) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            await loadUserProfile();
+            setupTabSwitching();
+        }
+
+        async function loadUserProfile() {
+            try {
+                const response = await api.getProfile();
+                if (response.success) {
+                    userData = response.user;
+                    populateProfileData();
+                }
+            } catch (error) {
+                alert('Failed to load profile');
+            }
+        }
+
+        function populateProfileData() {
+            document.getElementById('profileName').value = userData.name || '';
+            document.getElementById('profileEmail').value = userData.email;
+            document.getElementById('profilePhone').value = userData.phone || '';
+            document.getElementById('walletBalance').textContent = userData.wallet.balance.toLocaleString();
+            document.getElementById('coinsBalance').textContent = userData.coins;
+            document.getElementById('referralCode').textContent = userData.referralCode;
+        }
+
+        function setupTabSwitching() {
+            document.querySelectorAll('[data-tab]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tab = this.dataset.tab;
+                    
+                    document.querySelectorAll('.list-group-item').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                    document.getElementById(tab + 'Tab').classList.add('active');
+
+                    if (tab === 'wallet') loadTransactions();
+                    if (tab === 'profiles') loadProfiles();
+                });
+            });
+        }
+
+        document.getElementById('updateProfileBtn').addEventListener('click', async () => {
+            const name = document.getElementById('profileName').value;
+            const phone = document.getElementById('profilePhone').value;
+
+            try {
+                const response = await api.updateProfile({ name, phone });
+                if (response.success) {
+                    alert('Profile updated successfully');
+                    userData = response.user;
+                }
+            } catch (error) {
+                alert('Failed to update profile');
+            }
+        });
+
+        document.getElementById('copyReferralBtn').addEventListener('click', () => {
+            const code = document.getElementById('referralCode').textContent;
+            navigator.clipboard.writeText(code);
+            alert('Referral code copied!');
+        });
+
+        async function loadTransactions() {
+            try {
+                const response = await api.getTransactions();
+                const list = document.getElementById('transactionsList');
+
+                if (response.success && response.transactions.length > 0) {
+                    let html = '<div class="list-group">';
+                    response.transactions.forEach(tx => {
+                        const icon = tx.type === 'credit' ? 'arrow-down-circle text-success' : 'arrow-up-circle text-danger';
+                        html += `
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <i class="bi bi-${icon}"></i>
+                                        <strong>${tx.description}</strong>
+                                        <div class="small text-muted">${new Date(tx.createdAt).toLocaleString()}</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <strong class="${tx.type === 'credit' ? 'text-success' : 'text-danger'}">
+                                            ${tx.type === 'credit' ? '+' : '-'}₹${tx.amount.toLocaleString()}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    list.innerHTML = html;
+                } else {
+                    list.innerHTML = '<p class="text-muted">No transactions yet</p>';
+                }
+            } catch (error) {
+                document.getElementById('transactionsList').innerHTML = '<p class="text-danger">Failed to load transactions</p>';
+            }
+        }
+
+        async function loadProfiles() {
+            const list = document.getElementById('profilesList');
+            
+            if (!userData.profiles || userData.profiles.length === 0) {
+                list.innerHTML = '<p class="text-muted">No profiles created yet</p>';
+                return;
+            }
+
+            let html = '<div class="list-group">';
+            userData.profiles.forEach((profile, index) => {
+                html += `
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${profile.name}</strong>
+                                <div class="small text-muted">${profile.relationship}</div>
+                            </div>
+                            ${profile.isPrimary ? '<span class="badge bg-warning">Primary</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            list.innerHTML = html;
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

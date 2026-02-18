@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexBuy Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/tokens.css" />
+  <style>
+    body { background: var(--bg); color: var(--text-primary); }
+    .card { border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+    .stat { padding: 16px; border-radius: var(--radius-md); background: var(--white); box-shadow: var(--shadow-sm); }
+    .stat h3 { margin: 0; font-size: 24px; font-weight: 700; }
+    .stat p { margin: 0; color: var(--text-muted); }
+    .btn-primary { background: var(--brand-primary); border: none; }
+    .btn-primary:hover { background: var(--brand-primary-dark); }
+    .header { background: var(--gradient-primary); color: white; padding: 16px; border-radius: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <div class="header mb-4 d-flex align-items-center justify-content-between">
+      <div>
+        <h1 class="h3 mb-1">Admin Dashboard</h1>
+        <small>Manage products, audits, and live metrics</small>
+      </div>
+      <div>
+        <a href="/index.html" class="btn btn-light btn-sm"><i class="bi bi-house-door"></i> Storefront</a>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="stat">
+          <p>Total Products</p>
+          <h3 id="statTotal">—</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat">
+          <p>In Stock</p>
+          <h3 id="statInStock">—</h3>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat">
+          <p>Categories</p>
+          <h3 id="statCategories">—</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <strong>Seeding & Image Audit</strong>
+            <div>
+              <button id="btnSeed" class="btn btn-sm btn-primary"><i class="bi bi-rocket"></i> Seed 5000</button>
+              <button id="btnVerify" class="btn btn-sm btn-warning"><i class="bi bi-image"></i> Verify Images</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <pre id="adminLog" style="min-height: 160px; background: var(--bg); padding: 12px; border-radius: 8px;"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header"><strong>Bulk Upsert Products (JSON)</strong></div>
+          <div class="card-body">
+            <textarea id="bulkJson" class="form-control mb-2" rows="8" placeholder='[{"sku":"NXB123","title":"Sample","category":"Electronics","brand":"BrandX","description":"..","providers":[{"name":"internal","price":{"current":999}}]}]'></textarea>
+            <button id="btnBulk" class="btn btn-success"><i class="bi bi-upload"></i> Upload</button>
+            <div id="bulkStatus" class="mt-2 small text-muted"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    async function fetchMetrics() {
+      const res = await api.get('/admin/metrics');
+      if (res && res.success) {
+        document.getElementById('statTotal').innerText = res.data.totalProducts.toLocaleString('en-IN');
+        document.getElementById('statInStock').innerText = res.data.inStock.toLocaleString('en-IN');
+        document.getElementById('statCategories').innerText = res.data.categoriesCount.toLocaleString('en-IN');
+      }
+    }
+
+    function log(msg) {
+      const el = document.getElementById('adminLog');
+      el.textContent += `\n${new Date().toLocaleTimeString('en-IN')} - ${msg}`;
+      el.scrollTop = el.scrollHeight;
+    }
+
+    document.getElementById('btnSeed').addEventListener('click', async ()=>{
+      log('Starting seeding 5000 products...');
+      const res = await api.post('/admin/seed5000', {});
+      log(res.success ? 'Seeding completed' : `Seeding failed: ${res.message}`);
+      fetchMetrics();
+    });
+
+    document.getElementById('btnVerify').addEventListener('click', async ()=>{
+      log('Starting image verification...');
+      const res = await api.post('/admin/verify-images', {});
+      log(res.success ? 'Image verification passed' : `Image verification failed: ${res.message}`);
+    });
+
+    document.getElementById('btnBulk').addEventListener('click', async ()=>{
+      try {
+        const payload = JSON.parse(document.getElementById('bulkJson').value || '[]');
+        const res = await api.post('/admin/products/bulk', payload);
+        document.getElementById('bulkStatus').innerText = res.success ? 'Bulk upsert success' : 'Failed';
+        fetchMetrics();
+      } catch (e) {
+        document.getElementById('bulkStatus').innerText = 'Invalid JSON';
+      }
+    });
+
+    fetchMetrics();
+  </script>
+</body>
+</html>

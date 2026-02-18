@@ -1,0 +1,12 @@
+# Project files to ignore
+Project1.zip
+read\ files/
+
+# Dependencies (if any at root level)
+node_modules/
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db

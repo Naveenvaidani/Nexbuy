@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NexBuy - The Future of Shopping is Here. Shop with voice commands, visual search, and compare prices across Amazon and Flipkart.">
+    <meta name="theme-color" content="#FF6F61">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NexBuy">
+    <title>NexBuy - The Future of Shopping</title>
+    
+    <!-- Prevent theme flicker on page load -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 
+                (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+    <link rel="alternate icon" href="/images/icon.svg">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/images/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-192x192.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Design Tokens & Styles -->
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chatbot.css">
+    <link rel="stylesheet" href="/css/modern.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-lightning-charge-fill" style="color: #FFB84D;"></i>
+                NexBuy
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="compare.html">Compare</a>
+                    </li>
+                </ul>
+                
+                <!-- Quick Actions -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Search -->
+                    <form class="d-none d-md-flex" id="navbarSearchForm" role="search" onsubmit="return false;">
+                        <input class="form-control me-2" id="navbarSearchInput" type="search" placeholder="Search products" aria-label="Search" style="width: 260px;">
+                        <button class="btn btn-outline-primary" id="navbarSearchBtn" title="Search">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+
+                    <!-- Chatbot Button -->
+                    <button class="btn btn-outline-primary" id="chatbotNavbarBtn" title="Chatbot">
+                        <i class="bi bi-chat-dots-fill"></i>
+                    </button>
+
+                    <!-- Voice (Mic) -->
+                    <button class="btn btn-outline-primary" id="voiceNavbarBtn" title="Voice Shopping">
+                        <i class="bi bi-mic-fill"></i>
+                    </button>
+
+                    <!-- Camera (Lens) -->
+                    <button class="btn btn-outline-primary" id="lensNavbarBtn" title="Visual Search">
+                        <i class="bi bi-camera-fill"></i>
+                    </button>
+                    
+                    <!-- Cart -->
+                    <a href="cart.html" class="btn btn-outline-primary position-relative">
+                        <i class="bi bi-cart3"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                            0
+                        </span>
+                    </a>
+                    
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary position-relative" type="button" id="notificationBtn" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell-fill"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount">
+                                0
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" id="notificationList" style="min-width: 300px; max-height: 400px; overflow-y: auto;">
+                            <li><span class="dropdown-item-text text-muted">No new notifications</span></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="dropdown" id="userMenu" style="display: none;">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i>
+                            <span id="userName"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="orders.html"><i class="bi bi-bag"></i> Orders</a></li>
+                            <li><a class="dropdown-item" href="wishlist.html"><i class="bi bi-heart"></i> Wishlist</a></li>
+                            <li><a class="dropdown-item" href="wallet.html"><i class="bi bi-wallet2"></i> Wallet</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <a href="login.html" class="btn btn-warning" id="loginBtn">
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-6 text-white mb-5 mb-lg-0">
+                    <div class="hero-badge">
+                        <span class="badge-shine">
+                            <i class="bi bi-lightning-charge-fill me-2"></i>
+                            NexBuy
+                        </span>
+                    </div>
+                    <h1 class="hero-title">The Future of Shopping is Here</h1>
+                    <p class="hero-subtitle">Shop smarter with voice commands, visual search, and AI-powered price comparison across Amazon & Flipkart</p>
+                    
+                    <div class="hero-actions">
+                        <a href="products.html" class="btn btn-primary btn-lg me-3">
+                            <i class="bi bi-bag-fill"></i>
+                            Start Shopping
+                        </a>
+                        <a href="compare.html" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-arrow-left-right"></i>
+                            Compare Prices
+                        </a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="row g-3">
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <div class="stat-number">50K+</div>
+                                    <p class="stat-label">Products</p>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <div class="stat-number">2</div>
+                                    <p class="stat-label">Platforms</p>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <div class="stat-number">100%</div>
+                                    <p class="stat-label">Customer Satisfaction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&h=400&fit=crop" alt="Shopping" class="hero-main-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-badge">FEATURES</span>
+                <h2 class="section-title mt-3">Why Choose NexBuy?</h2>
+                <p class="section-subtitle">Experience the future of e-commerce with cutting-edge AI technology</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="feature-card glass-effect">
+                        <div class="feature-icon-wrapper mb-4">
+                            <div class="feature-icon-bg"></div>
+                            <i class="bi bi-mic-fill feature-icon"></i>
+                        </div>
+                        <h3 class="feature-title">Voice Shopping</h3>
+                        <p class="feature-description">Shop hands-free with natural voice commands. Just speak what you need!</p>
+                        <ul class="feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i> Natural language processing</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Add to cart by voice</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Voice-guided checkout</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="feature-card featured">
+                        <span class="popular-badge">MOST POPULAR</span>
+                        <div class="feature-icon-wrapper mb-4">
+                            <div class="feature-icon-bg"></div>
+                            <i class="bi bi-camera-fill feature-icon"></i>
+                        </div>
+                        <h3 class="feature-title">Visual Search</h3>
+                        <p class="feature-description">Find products by taking a photo. Our AI identifies and matches instantly!</p>
+                        <ul class="feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i> Real-time image recognition</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Similar product suggestions</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Upload or capture photos</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="feature-card glass-effect">
+                        <div class="feature-icon-wrapper mb-4">
+                            <div class="feature-icon-bg"></div>
+                            <i class="bi bi-graph-up-arrow feature-icon"></i>
+                        </div>
+                        <h3 class="feature-title">Smart Price Compare</h3>
+                        <p class="feature-description">Compare prices across Amazon & Flipkart to get the best deals!</p>
+                        <ul class="feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i> Real-time price tracking</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Multi-platform comparison</li>
+                            <li><i class="bi bi-check-circle-fill"></i> Best deal alerts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Products Section -->
+    <section class="py-6 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-badge">TRENDING NOW</span>
+                <h2 class="section-title mt-3">Popular Products</h2>
+            </div>
+            <div id="trendingProducts" class="row g-4">
+                <!-- Products will be loaded here -->
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Camera Modal -->
+    <div class="modal fade" id="cameraModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Visual Search</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cameraPermissionRequest" class="alert alert-info">
+                        <h6><i class="bi bi-camera-fill me-2"></i>Camera Permission Required</h6>
+                        <p>NexBuy needs access to your camera for visual product search. Your images are processed securely and deleted after search.</p>
+                        
+                        <div class="mb-3">
+                            <strong>How it works:</strong>
+                            <ol class="small mt-2">
+                                <li>Point your camera at any product</li>
+                                <li>Tap "Capture & Search"</li>
+                                <li>Get instant similar product matches</li>
+                            </ol>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="requestCameraBtn">
+                            <i class="bi bi-camera-fill me-2"></i>Allow Camera Access
+                        </button>
+                        <button class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#uploadFallback">
+                            <i class="bi bi-upload me-2"></i>Or Upload Image
+                        </button>
+                    </div>
+                    
+                    <div id="cameraView" style="display: none;">
+                        <video id="cameraPreview" autoplay playsinline class="w-100 rounded mb-3"></video>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-success flex-grow-1" id="captureBtn">
+                                <i class="bi bi-camera-fill me-2"></i>Capture & Search
+                            </button>
+                            <button class="btn btn-outline-secondary" id="stopCameraBtn">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="uploadFallback" class="collapse">
+                        <input type="file" class="form-control" id="imageUpload" accept="image/*">
+                        <button class="btn btn-primary mt-2" id="uploadSearchBtn">Search by Image</button>
+                    </div>
+                    
+                    <div id="lensResults" class="mt-4" style="display: none;">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Assistant Modal -->
+    <div class="modal fade" id="voiceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">AURA - Voice Assistant</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="micPermissionRequest" class="alert alert-info">
+                        <h6><i class="bi bi-mic-fill me-2"></i>Microphone Permission Required</h6>
+                        <p>AURA needs microphone access for voice commands. Your voice data is processed transiently and not stored unless you opt-in.</p>
+                        
+                        <div class="mb-3">
+                            <strong>Try saying:</strong>
+                            <ul class="small mt-2">
+                                <li>"Add iPhone 13 to cart"</li>
+                                <li>"Search for wireless headphones"</li>
+                                <li>"Show my cart"</li>
+                                <li>"Checkout"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="voiceDataRetention">
+                            <label class="form-check-label" for="voiceDataRetention">
+                                Store my voice data for better personalization (optional)
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" id="requestMicBtn">
+                            <i class="bi bi-mic-fill me-2"></i>Allow Microphone Access
+                        </button>
+                        <button class="btn btn-outline-secondary" id="useTextBtn">Use Text Instead</button>
+                    </div>
+                    
+                    <div id="voiceInterface" style="display: none;">
+                        <div class="text-center mb-3">
+                            <button class="btn btn-lg btn-link p-0 border-0" id="voiceAnimationBtn" title="Click to start/stop listening">
+                                <div id="voiceAnimation" class="voice-wave">
+                                    <div class="wave"></div>
+                                    <div class="wave"></div>
+                                    <div class="wave"></div>
+                                </div>
+                            </button>
+                            <p id="voiceStatus" class="mt-3 text-muted fw-bold">Click the microphone to start</p>
+                        </div>
+                        
+                        <div id="voiceTranscript" class="alert alert-secondary" style="display: none;">
+                            <strong>You said:</strong> <span id="transcriptText"></span>
+                        </div>
+                        
+                        <div id="voiceResponse" class="alert alert-primary" style="display: none;">
+                            <strong>AURA:</strong> <span id="responseText"></span>
+                        </div>
+                    </div>
+                    
+                    <div id="textInterface" style="display: none;">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="textInput" placeholder="Type your command...">
+                            <button class="btn btn-primary" id="sendTextBtn">Send</button>
+                        </div>
+                        <div id="chatHistory"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visual Search Modal -->
+    <div class="modal fade" id="lensModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-camera-fill me-2"></i>Visual Search</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cameraPermissionRequest" class="alert alert-info">
+                        <h6><i class="bi bi-camera-fill me-2"></i>Camera Permission Required</h6>
+                        <p>Upload or capture product images to find similar items instantly.</p>
+                        <button class="btn btn-primary" id="requestCameraBtn">
+                            <i class="bi bi-camera-fill me-2"></i>Allow Camera Access
+                        </button>
+                        <button class="btn btn-outline-secondary" id="useUploadBtn">Upload Image Instead</button>
+                    </div>
+                    
+                    <div id="lensInterface" style="display: none;">
+                        <div class="text-center mb-3">
+                            <video id="cameraPreview" autoplay playsinline style="max-width: 100%; display: none;"></video>
+                            <canvas id="captureCanvas" style="display: none;"></canvas>
+                            <div id="imagePreview" style="display: none;">
+                                <img id="previewImage" style="max-width: 100%; max-height: 300px;" />
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2 justify-content-center mb-3">
+                            <button class="btn btn-primary" id="captureBtn" style="display: none;">
+                                <i class="bi bi-camera-fill me-1"></i>Capture
+                            </button>
+                            <input type="file" id="uploadInput" accept="image/*" style="display: none;">
+                            <button class="btn btn-outline-primary" id="uploadBtn">
+                                <i class="bi bi-upload me-1"></i>Upload Image
+                            </button>
+                            <button class="btn btn-success" id="searchImageBtn" style="display: none;">
+                                <i class="bi bi-search me-1"></i>Search Products
+                            </button>
+                        </div>
+                        
+                        <div id="lensResults" style="display: none;">
+                            <h6>Similar Products:</h6>
+                            <div id="lensProductsGrid" class="row g-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle" id="darkModeToggle" title="Toggle Dark Mode">
+        <i class="bi bi-moon-stars-fill"></i>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-2">&copy; 2024 NexBuy. The Future of Shopping.</p>
+            <p class="mb-0">
+                <a href="#" class="text-white-50 me-3">Privacy Policy</a>
+                <a href="#" class="text-white-50 me-3">Terms of Service</a>
+                <a href="#" class="text-white-50">Contact Us</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Socket.io -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/python-services.js"></script>
+    <script src="js/voice.js"></script>
+    <script src="js/lens.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script>
+        // Initialize Voice and Lens modals on button clicks
+        document.addEventListener('DOMContentLoaded', () => {
+            const voiceBtn = document.getElementById('voiceNavbarBtn');
+            const lensBtn = document.getElementById('lensNavbarBtn');
+            
+            if (voiceBtn) {
+                voiceBtn.addEventListener('click', () => {
+                    const voiceModal = new bootstrap.Modal(document.getElementById('voiceModal'));
+                    voiceModal.show();
+                    if (window.voiceAssistant) {
+                        window.voiceAssistant.initialize();
+                    }
+                });
+            }
+            
+            if (lensBtn) {
+                lensBtn.addEventListener('click', () => {
+                    const lensModal = new bootstrap.Modal(document.getElementById('lensModal'));
+                    lensModal.show();
+                    if (window.lensManager) {
+                        window.lensManager.initialize();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details - NexBuy</title>
+    
+    <!-- Prevent theme flicker on page load -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 
+                (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">NexBuy</a>
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-outline-primary" id="chatbotNavbarBtn" title="Chatbot">
+          <i class="bi bi-chat-dots-fill"></i>
+        </button>
+        <a href="cart.html" class="btn btn-outline-primary position-relative">
+          <i class="bi bi-cart3"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <div id="productContainer" class="row g-4">
+      <div class="col-md-6">
+        <img id="productImage" class="img-fluid rounded" alt="Product" style="max-height: 420px; object-fit: cover;" />
+      </div>
+      <div class="col-md-6">
+        <h2 id="productTitle" class="mb-2"></h2>
+        <p id="productBrand" class="text-muted"></p>
+        <div class="mb-3" id="priceBlock"></div>
+        <p id="productDescription"></p>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" id="addToCartBtn"><i class="bi bi-cart-plus"></i> Add to Cart</button>
+          <a href="products.html" class="btn btn-outline-secondary">Back to Products</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/product.js"></script>
+</body>
+</html>

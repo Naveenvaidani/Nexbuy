@@ -1,0 +1,45 @@
+{
+  "name": "NexBuy - The Future of Shopping",
+  "short_name": "NexBuy",
+  "description": "AI-powered e-commerce platform with voice assistant and visual search",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF6F61",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "screenshots": [
+    
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Products",
+      "short_name": "Search",
+      "description": "Search for products",
+      "url": "/products.html",
+      "icons": [{ "src": "/images/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "My Cart",
+      "short_name": "Cart",
+      "description": "View shopping cart",
+      "url": "/cart.html",
+      "icons": [{ "src": "/images/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "My Orders",
+      "short_name": "Orders",
+      "description": "View order history",
+      "url": "/orders.html",
+      "icons": [{ "src": "/images/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}

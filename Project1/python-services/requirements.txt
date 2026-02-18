@@ -1,0 +1,13 @@
+flask==3.0.0
+flask-cors==4.0.0
+pillow==10.1.0
+numpy==1.26.2
+opencv-python==4.8.1.78
+torch==2.1.1
+torchvision==0.16.1
+transformers==4.35.2
+sentence-transformers==2.2.2
+speechrecognition==3.10.0
+pydub==0.25.1
+requests==2.31.0
+python-dotenv==1.0.0

@@ -1,0 +1,144 @@
+name: NexBuy CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+      workflow_dispatch:
+
+    env:
+      NODE_VERSION: '18.x'
+      MONGODB_URI_TEST: 'mongodb://localhost:27017/nexbuy_test'
+    branches: [ main, develop ]
+
+jobs:
+    # ============================================
+    # COLOR AUDIT JOB - Enforce NO PURPLE
+    # ============================================
+    color-audit:
+      name: 🎨 Color Audit (No Purple Check)
+      runs-on: ubuntu-latest
+    
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+      
+        - name: Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+      
+        - name: Run color audit script
+          run: node scripts/auditColors.js frontend/css
+        
+        - name: Upload violations report
+          if: failure()
+          uses: actions/upload-artifact@v3
+          with:
+            name: color-audit-violations
+            path: color-violations.txt
+
+  backend-tests:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+      needs: [color-audit]
+    
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+    
+    - name: Install Backend Dependencies
+      working-directory: ./backend
+      run: npm ci
+    
+    - name: Lint Backend Code
+      working-directory: ./backend
+      run: npm run lint
+    
+    - name: Run Backend Tests
+      working-directory: ./backend
+      env:
+        NODE_ENV: test
+        MONGODB_URI: mongodb://localhost:27017/nexbuy_test
+        REDIS_URL: redis://localhost:6379
+        JWT_SECRET: test-secret-key
+        DATA_PROVIDER_MODE: mock
+      run: npm test
+    
+    - name: Upload Backend Coverage
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./backend/coverage/lcov.info
+        flags: backend
+
+  frontend-tests:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install Frontend Dependencies
+      working-directory: ./frontend
+      run: npm ci
+    
+    - name: Lint Frontend Code
+      working-directory: ./frontend
+      run: npm run lint
+    
+    - name: Run Frontend Tests
+      working-directory: ./frontend
+      run: npm test
+
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Backend Image
+      run: docker build -t nexbuy-backend:${{ github.sha }} ./backend
+    
+    - name: Build Frontend Image
+      run: docker build -t nexbuy-frontend:${{ github.sha }} ./frontend
+    
+    - name: Test Docker Compose
+      run: |
+        cp .env.example .env
+        docker-compose config

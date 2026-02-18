@@ -1,0 +1,22 @@
+{
+  "name": "nexbuy",
+  "version": "1.0.0",
+  "description": "NexBuy - The Future of Shopping",
+  "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run open\"",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && http-server . -p 3000 -c-1 --cors",
+    "open": "timeout /t 5 /nobreak >nul && start http://127.0.0.1:3000",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run start:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "seed": "cd backend && node scripts/seedProducts.js && node scripts/seedUsers.js",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "clean": "taskkill /F /IM node.exe 2>nul || echo No processes to kill",
+    "audit:colors": "node scripts/auditColors.js frontend/css"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0",
+    "open-cli": "^8.0.0"
+  }
+}

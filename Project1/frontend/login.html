@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NexBuy</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+    <div class="min-vh-100 d-flex align-items-center justify-content-center py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card shadow-lg border-0" style="border-radius: 24px; overflow: hidden;">
+                        <!-- Header -->
+                        <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #FF6F61 0%, #FF8A80 100%);">
+                            <h3 class="mb-0 fw-bold">
+                                <i class="bi bi-lightning-charge-fill me-2"></i>
+                                NexBuy
+                            </h3>
+                            <p class="mb-0 mt-2 small">The Future of Shopping</p>
+                        </div>
+                        
+                        <!-- Body -->
+                        <div class="card-body p-5">
+                            <!-- Tab Navigation -->
+                            <ul class="nav nav-pills nav-fill mb-4" id="authTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login" type="button">
+                                        Login
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#register" type="button">
+                                        Register
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content" id="authTabContent">
+                                <!-- Login Form -->
+                                <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                    <form id="loginForm">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Email</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold">Password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                                Login
+                                            </button>
+                                        </div>
+
+                                        <div class="text-center mt-3">
+                                            <small class="text-muted">Demo: user@demo.com / password123</small>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Register Form -->
+                                <div class="tab-pane fade" id="register" role="tabpanel">
+                                    <form id="registerForm">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Full Name</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                <input type="text" class="form-control" id="registerName" placeholder="Enter your name" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Email</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Phone</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                                                <input type="tel" class="form-control" id="registerPhone" placeholder="Enter phone number" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold">Password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                <input type="password" class="form-control" id="registerPassword" placeholder="Create password" required>
+                                            </div>
+                                            <small class="text-muted">Min 6 characters</small>
+                                        </div>
+
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <i class="bi bi-person-plus me-2"></i>
+                                                Create Account
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Guest Access -->
+                            <div class="text-center mt-4 pt-4 border-top">
+                                <p class="text-muted mb-2">Just browsing?</p>
+                                <button class="btn btn-outline-secondary" id="guestBtn">
+                                    <i class="bi bi-eye me-2"></i>
+                                    Continue as Guest
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Back to Home -->
+                    <div class="text-center mt-4">
+                        <a href="/" class="text-decoration-none">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Toast helper
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastId = `toast-${Date.now()}`;
+            
+            const bgColors = {
+                success: 'bg-success',
+                error: 'bg-danger',
+                warning: 'bg-warning',
+                info: 'bg-primary'
+            };
+
+            const icons = {
+                success: 'bi-check-circle-fill',
+                error: 'bi-x-circle-fill',
+                warning: 'bi-exclamation-triangle-fill',
+                info: 'bi-info-circle-fill'
+            };
+
+            const toastHtml = `
+                <div id="${toastId}" class="toast align-items-center text-white ${bgColors[type]} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bi ${icons[type]} me-2"></i>
+                            ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            
+            const toastEl = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+
+            toastEl.addEventListener('hidden.bs.toast', () => {
+                toastEl.remove();
+            });
+        }
+
+        // Get redirect URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect') || '/';
+
+        // Login Form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+
+            try {
+                const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    mode: 'cors',
+                    body: JSON.stringify({ email, password })
+                });
+
+                let data = {};
+                try { data = await response.json(); } catch {}
+
+                if (response.ok && data.token) {
+                    authManager.setAuth(data.token, data.user);
+                    showToast('Login successful!', 'success');
+                    setTimeout(() => { window.location.href = redirectUrl; }, 500);
+                } else {
+                    const msg = (data && data.message) ? data.message : `Login failed (${response.status})`;
+                    showToast(msg, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Login';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                const msg = (error && error.message && /CORS|Network/i.test(error.message)) ?
+                    'Connection blocked. Please use http://localhost:3001 and ensure backend is running.' :
+                    'Network error. Please try again.';
+                showToast(msg, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Login';
+            }
+        });
+
+        // Register Form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+
+            try {
+                const response = await fetch(`${API_CONFIG.BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    mode: 'cors',
+                    body: JSON.stringify({ name, email, phone, password })
+                });
+
+                let data = {};
+                try { data = await response.json(); } catch {}
+
+                if (response.ok && data.token) {
+                    authManager.setAuth(data.token, data.user);
+                    showToast('Account created successfully!', 'success');
+                    setTimeout(() => { window.location.href = redirectUrl; }, 500);
+                } else {
+                    const msg = (data && data.message) ? data.message : `Registration failed (${response.status})`;
+                    showToast(msg, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-person-plus me-2"></i>Create Account';
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                const msg = (error && error.message && /CORS|Network/i.test(error.message)) ?
+                    'Connection blocked. Please use http://localhost:3001 and ensure backend is running.' :
+                    'Network error. Please try again.';
+                showToast(msg, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-person-plus me-2"></i>Create Account';
+            }
+        });
+
+        // Guest Access
+        document.getElementById('guestBtn').addEventListener('click', () => {
+            // Set guest flag
+            localStorage.setItem('guestMode', 'true');
+            window.location.href = redirectUrl;
+        });
+
+        // If already logged in, redirect
+        if (authManager.isAuthenticated()) {
+            window.location.href = redirectUrl;
+        }
+    </script>
+</body>
+</html>
